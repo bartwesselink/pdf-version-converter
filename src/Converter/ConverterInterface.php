@@ -19,10 +19,11 @@ interface ConverterInterface
 {
     /**
      * Change PDF version of given $file to $newVersion.
+     * @param string $gsExecutable Ghostscript executable
      * @param string $file absolute path.
      * @param string $newVersion version (1.4, 1.5, 1.6, etc).
      * @throws \RuntimeException if something goes wrong.
      * @return void
      */
-    public function convert($file, $newVersion);
+    public function convert($gsExecutable, $file, $newVersion);
 }
