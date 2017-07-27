@@ -32,11 +32,10 @@ class GhostscriptConverterCommand
     {
         $command = $executable.sprintf($this->baseCommand, $newVersion, $newFile, escapeshellarg($originalFile));
 
-        $process = new Process($command);
-        $process->run();
+        exec($command);
 
-        if (!$process->isSuccessful()) {
-            throw new \RuntimeException($process->getErrorOutput());
+        if (!file_exists($newFile)) {
+            throw new \RuntimeException();
         }
     }
 }
