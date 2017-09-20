@@ -59,15 +59,19 @@ class GhostscriptConverter implements ConverterInterface
     /**
      * {@inheritdoc }
      */
-    public function convert($gsExecutable, $file, $newVersion)
+    public function convert($gsExecutable, $files, $newVersion)
     {
         $tmpFile = $this->generateAbsolutePathOfTmpFile();
 
-        $this->command->run($gsExecutable, $file, $tmpFile, $newVersion);
+        if (!is_array($files)) {
+            $files = [$files];
+        }
+
+        $this->command->run($gsExecutable, $files, $tmpFile, $newVersion);
 
         if (!$this->fs->exists($tmpFile))
             throw new \RuntimeException("The generated file '{$tmpFile}' was not found.");
 
-        $this->fs->copy($tmpFile, $file, true);
+        return $tmpFile;
     }
 }

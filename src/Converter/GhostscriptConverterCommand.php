@@ -22,15 +22,20 @@ class GhostscriptConverterCommand
     /**
      * @var string
      */
-    protected $baseCommand = ' -sDEVICE=pdfwrite -dCompatibilityLevel=%s -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -dColorConversionStrategy=/LeaveColorUnchanged -dEncodeColorImages=false -dEncodeGrayImages=false -dEncodeMonoImages=false -dDownsampleMonoImages=false -dDownsampleGrayImages=false -dDownsampleColorImages=false -dAutoFilterColorImages=false -dAutoFilterGrayImages=false -dColorImageFilter=/FlateEncode -dGrayImageFilter=/FlateEncode  -sOutputFile=%s %s';
+    protected $baseCommand = ' -sDEVICE=pdfwrite -dCompatibilityLevel=%s -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile=%s %s';
 
     public function __construct()
     {
     }
 
-    public function run($executable, $originalFile, $newFile, $newVersion)
+    public function run($executable, $originalFiles, $newFile, $newVersion)
     {
-        $command = $executable.sprintf($this->baseCommand, $newVersion, $newFile, escapeshellarg($originalFile));
+        $escapedFiles = [];
+        foreach ($originalFiles as $file) {
+            $escapedFiles[] = escapeshellarg($file);
+        }
+
+        $command = $executable.sprintf($this->baseCommand, $newVersion, $newFile, implode(' ', $escapedFiles));
 
         exec($command);
 
